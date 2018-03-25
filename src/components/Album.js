@@ -12,8 +12,9 @@ class Album extends Component {
  
      this.state = {
        album: album,
-       currentSong: album.songs[0],
+       currentSong: null,
        currentTime: 0,
+       selectSong: null,
        duration: album.songs[0].duration, 
        volume: .10,
        isPlaying: false
@@ -64,7 +65,15 @@ class Album extends Component {
      this.audioElement.src = song.audioSrc;
      this.setState({ currentSong: song });
    }
-
+   handleSongHover(index){
+	console.log("hover");
+     const song = this.state.album.songs[index];
+     this.setState({selectSong: song});
+   }
+   handleSongLeave(){
+	console.log("left");
+     this.setState({selectSong: null});
+   }
    handleSongClick(song) {
      const isSameSong = this.state.currentSong === song;
      if (this.state.isPlaying && isSameSong){
@@ -121,13 +130,13 @@ class Album extends Component {
            </colgroup>  
            <tbody>
 	      {this.state.album.songs.map((song,index)=>
-	        <tr className="song" key={index} onClick={() => this.handleSongClick(song)} >
+	        <tr className="song" key={index} onMouseLeave={() => this.handleSongLeave()} onMouseEnter={()=> this.handleSongHover(index)} onClick={() => this.handleSongClick(song)} >
                  <td className="song-actions">
-                   <button>
-                     <span className="song-number">{index+1}</span>
-                     <span className="ion-play"></span>
-                     <span className="ion-pause"></span>
-                   </button>
+		   {(song === this.state.currentSong) ? (
+			!this.state.isPlaying ? <span className="ion-play"></span> : <span className="ion-pause"></span>
+		     ) : (
+                        (song === this.state.selectSong) ? <span className="ion-play"></span> : <span className="song-number">{index+1}</span>)
+		   }
                  </td>
                  <td className="song-title">{song.title}</td>
                  <td className="song-duration">{this.formatTime(song.duration)}</td>
