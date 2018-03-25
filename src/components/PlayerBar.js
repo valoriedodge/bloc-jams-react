@@ -11,7 +11,8 @@ import React, { Component } from 'react';
            <div id="play-pause" onClick={this.props.handleSongClick}>
              <span className={this.props.isPlaying ? 'ion-pause' : 'ion-play'}></span>
            </div>
-           <div id="next">
+           <div id="next" onClick={this.props.handleNextClick}>
+
              <span className="ion-skip-forward"></span>
            </div>
          </section>
